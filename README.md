@@ -568,7 +568,7 @@ proot-distro login ubuntu \
 OUTER_EOF
 chmod +x print_document.sh
 ```
-## **8. Connect the Printer/Scanner and give permission and extract the device uri and serial number (needed to put in print script manually).**
+## **8. Connect the Printer/Scanner and give permission and extract the device uri and serial number (needed to put in print_document.sh script manually).**
 ```
 termux-usb -l
 ```
