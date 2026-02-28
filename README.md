@@ -77,4 +77,3 @@ Since you installed the **Termux:Widget** app from F-Droid, you can just tap the
 
 ---
 
-How does that layout look to you? Are we ready to call this project officially ready for GitHub?
