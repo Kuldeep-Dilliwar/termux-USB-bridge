@@ -109,3 +109,16 @@ Because Termux stores files securely, you need to copy them to your public phone
 
 This installer automatically creates Android home screen widgets for you!
 Since you installed the **Termux:Widget** app from F-Droid, you can just tap the "Scan" or "Print" buttons directly from your phone's home screen without ever opening the terminal.
+
+---
+---
+
+> ### 📝 Project Scope & Limitations
+> 
+> 
+> * **The Primary Goal:** This project is a **proof-of-concept** to demonstrate that you can run Linux user-space hardware drivers (which normally require `root` or `DBUS`) inside a rootless Android PRoot environment.
+> * **Hardware Compatibility:** This setup works flawlessly for my older HP printer and scanner. However, because every printer brand speaks a completely different language (ZjStream, SPL, CAPT, etc.), it may not work out-of-the-box for your specific model. I cannot physically test every printer in existence.
+> * **Modern Printers:** If you have a modern Wi-Fi printer, you likely don't need this repository—just download the official app from the Google Play Store.
+> * **Make It Your Own:** I encourage you to fork this repository, check out the custom C-bridge in the `src/` folder, and modify the bash scripts to route your specific printer's driver!
+> 
+> 
