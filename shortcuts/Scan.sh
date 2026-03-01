@@ -1,18 +1,11 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-USB_DEVICE=$(termux-usb -l | grep "/dev/bus/usb" | tr -d '", ')
+USB_DEVICE=$(termux-usb -l | grep -o "/dev/bus/usb/[0-9]*/[0-9]*" | head -n 1)
 
 if [ -z "$USB_DEVICE" ]; then
     termux-toast "Error: Scanner not found. Check USB connection."
     exit 1
 fi
 
-termux-toast "Starting HP Scan: $USB_DEVICE"
+termux-toast "Starting Universal Scan..."
 termux-usb -r -e $PREFIX/bin/run_scanner.sh "$USB_DEVICE"
-
-sleep 5
-mv $PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu/root/hpscan*.* $HOME/ 2>/dev/null
-
-if ls $HOME/hpscan*.* 1> /dev/null 2>&1; then
-    termux-toast "Scan complete!"
-fi

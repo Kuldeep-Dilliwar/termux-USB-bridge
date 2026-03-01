@@ -1,6 +1,6 @@
 # termux-USB-bridge
 
-**Bring true desktop-class (HP) Printer and Scanner support to Termux (No Root Required!)**
+**Bring true desktop-class Printer and Scanner support to Termux (No Root Required!)**
 
 > **⚠️ DISCLAIMER: RUN AT YOUR OWN RISK ⚠️**
 > **Please note:** This setup uses `proot` to create a "fake root" sandbox so the Linux drivers can work. Because of this, strict security apps (like banking or mobile carrier apps) might temporarily throw a **"Device is Rooted" false alarm** if you open them while scanning or printing.
@@ -40,7 +40,7 @@ termux-print /path/to/your/document.pdf
 ```
 
 **Advanced Print Options:**
-You can customize paper size, scaling, and hardware protocols:
+You can customize paper size, scaling, hardware protocols, and even pass raw Ghostscript flags:
 
 * `--a4` : Print on A4 paper (Default)
 * `--letter` : Print on US Letter paper
@@ -74,7 +74,34 @@ termux-scan
 
 ```
 
-Your scanned images will be automatically saved to the `~/scans` folder in your Termux home directory!
+Your scanned images will be automatically saved as high-quality `.jpg` files to the `~/scans` folder in your Termux home directory! This tool uses **SANE** under the hood, meaning it supports hundreds of scanners natively across brands like HP, Epson, Brother, and Canon.
+
+**Advanced Scan Options:**
+You can customize the scan resolution, color mode, or pass raw SANE arguments:
+
+* `--res` : Set DPI resolution (Default: `300`)
+* `--mode` : Set color mode (`Color`, `Gray`, `Lineart`. Default: `Color`)
+* `--scan-args` : Pass custom flags directly to SANE (Ensure you wrap the flags in quotes).
+
+*Example 1: Scan in Grayscale at 600 DPI, and specify an Automatic Document Feeder (ADF):*
+
+```bash
+termux-scan --res 600 --mode Gray --scan-args "--source 'ADF'"
+
+```
+
+*Example 2: Restrict scan area to standard A4 size (Useful to prevent flatbed scanners from scanning blank space up to Legal size):*
+
+```bash
+termux-scan --scan-args "-x 210 -y 297"
+
+```
+
+**Viewing Your Scans in Android:**
+Because Termux stores files securely, you need to copy them to your public phone storage to see them in your Gallery app.
+
+1. Run `termux-setup-storage` and grant permission (you only need to do this once).
+2. Copy your scans to your phone's public Downloads folder by typing: `cp ~/scans/*.jpg ~/storage/downloads/`
 
 ---
 
@@ -82,6 +109,3 @@ Your scanned images will be automatically saved to the `~/scans` folder in your 
 
 This installer automatically creates Android home screen widgets for you!
 Since you installed the **Termux:Widget** app from F-Droid, you can just tap the "Scan" or "Print" buttons directly from your phone's home screen without ever opening the terminal.
-
----
-

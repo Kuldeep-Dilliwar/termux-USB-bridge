@@ -29,11 +29,11 @@ proot-distro login ubuntu \
     --bind "$REPO_DIR:/repo" \
     -- env TERMUX_USB_FD="$FD" TERMUX_USB_DEV="$DEV_STR" FILE_TO_PRINT="$FILE_TO_PRINT" PRINT_PAPER="$PRINT_PAPER" PRINT_FIT="$PRINT_FIT" FOO_PAPER="$FOO_PAPER" PRINT_RES="$PRINT_RES" PRINT_MODEL="$PRINT_MODEL" GS_EXTRA_ARGS="$GS_EXTRA_ARGS" bash -c "
 
-    # 1. Rebuild Bridge from Template
-    cp /repo/src/printer_bridge_template.c /tmp/printer_bridge.c
-    sed -i \"s/__FD__/\$TERMUX_USB_FD/g\" /tmp/printer_bridge.c
-    sed -i \"s/__DEV__/\$TERMUX_USB_DEV/g\" /tmp/printer_bridge.c
-    gcc -shared -fPIC -o /usr/local/lib/libusb_printer.so /tmp/printer_bridge.c -ldl
+    # 1. Rebuild Unified Bridge dynamically
+    cp /repo/src/usb_bridge_template.c /tmp/usb_bridge.c
+    sed -i \"s/__FD__/\$TERMUX_USB_FD/g\" /tmp/usb_bridge.c
+    sed -i \"s/__DEV__/\$TERMUX_USB_DEV/g\" /tmp/usb_bridge.c
+    gcc -shared -fPIC -o /usr/local/lib/libusb_bridge.so /tmp/usb_bridge.c -ldl
 
     # 2. Render PDF to ZJS (Using fully dynamic settings)
     echo \"[*] Rendering PDF (Size: \$PRINT_PAPER, Res: \$PRINT_RES, Model: \$PRINT_MODEL)...\"
@@ -46,7 +46,7 @@ proot-distro login ubuntu \
     echo \"[*] Rendered Size: \${SIZE_KB}KB\"
 
     # 4. Push to hardware via Bridge
-    export LD_PRELOAD=\"/usr/local/lib/libusb_printer.so\"
+    export LD_PRELOAD=\"/usr/local/lib/libusb_bridge.so\"
     
     echo \"[*] Auto-discovering Printer URI...\"
     DISCOVERED_URI=\$(/usr/lib/cups/backend/usb 2>/dev/null | grep \"^direct usb\" | awk '{print \$2}' | tr -d '\"')

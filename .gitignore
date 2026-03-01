@@ -1,0 +1,14 @@
+# Compiled binaries and libraries
+bin/
+*.o
+*.so
+
+# Editor and OS specific files
+.vscode/
+.DS_Store
+*~
+*.swp
+
+# Runtime directories (in case tests are run locally)
+fake_usb/
+scans/

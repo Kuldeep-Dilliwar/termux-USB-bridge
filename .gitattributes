@@ -1,0 +1,8 @@
+# Enforce Linux line endings (LF) for all scripts and source files
+*.sh text eol=lf
+*.c text eol=lf
+Makefile text eol=lf
+
+# Explicitly target your extensionless bash wrappers
+scripts/termux-scan text eol=lf
+scripts/termux-print text eol=lf

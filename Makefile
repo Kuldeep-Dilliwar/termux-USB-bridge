@@ -29,23 +29,19 @@ build-native:
 	gcc -o $(BIN_DIR)/universal_clone $(SRC_DIR)/universal_clone.c
 
 build-proot:
-	@echo "Compiling Scanner Bridge inside Ubuntu PRoot..."
-	mkdir -p $(BIN_DIR)
-	proot-distro login ubuntu --bind "$(PWD):/build" -- bash -c "gcc -shared -fPIC -o /build/$(BIN_DIR)/libusb_scanner.so /build/$(SRC_DIR)/scanner_bridge.c -ldl"
+	@echo "No pre-compiled bridge needed. Bridge is compiled dynamically at runtime!"
 
 install: install-deps all
 	@echo "Installing scripts and binaries..."
 	cp $(BIN_DIR)/universal_clone $(PREFIX)/bin/
 	chmod +x $(PREFIX)/bin/universal_clone
 	
-	proot-distro login ubuntu --bind "$(PWD):/build" -- bash -c "cp /build/$(BIN_DIR)/libusb_scanner.so /usr/local/lib/ && chmod 777 /usr/local/lib/*.so"
-	
 	@echo "Configuring CUPS USB Wrapper..."
 	proot-distro login ubuntu -- bash -c "if [ ! -f /usr/lib/cups/backend/usb-real ]; then mv /usr/lib/cups/backend/usb /usr/lib/cups/backend/usb-real; fi"
 	proot-distro login ubuntu -- bash -c "chmod a-s /usr/lib/cups/backend/usb-real && chmod 755 /usr/lib/cups/backend/usb-real"
 	proot-distro login ubuntu -- bash -c "echo '#!/bin/bash' > /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "echo 'export LD_LIBRARY_PATH=\"/usr/local/lib\"' >> /usr/lib/cups/backend/usb"
-	proot-distro login ubuntu -- bash -c "echo 'export LD_PRELOAD=\"/usr/local/lib/libusb_printer.so\"' >> /usr/lib/cups/backend/usb"
+	proot-distro login ubuntu -- bash -c "echo 'export LD_PRELOAD=\"/usr/local/lib/libusb_bridge.so\"' >> /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "echo 'export LIBUSB_DEBUG=4' >> /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "echo 'exec /usr/lib/cups/backend/usb-real \"\$$@\"' >> /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "chmod 755 /usr/lib/cups/backend/usb"
@@ -65,3 +61,4 @@ install: install-deps all
 
 clean:
 	rm -rf $(BIN_DIR)
+	
