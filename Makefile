@@ -1,3 +1,5 @@
+.PHONY: all install-deps build-native build-proot install clean
+
 # Makefile for Termux USB Bridge
 
 PREFIX ?= /data/data/com.termux/files/usr
@@ -45,6 +47,14 @@ install: install-deps all
 	proot-distro login ubuntu -- bash -c "echo 'export LIBUSB_DEBUG=4' >> /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "echo 'exec /usr/lib/cups/backend/usb-real \"\$$@\"' >> /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "chmod 755 /usr/lib/cups/backend/usb"
+
+	mkdir -p $(PREFIX)/tmp
+	@echo "Copying native bridge template to PREFIX/tmp/..."
+	cp $(SRC_DIR)/usb_bridge_native_template.c $(PREFIX)/tmp/
+
+	@echo "Copying PRoot bridge template to Ubuntu /tmp/..."
+	mkdir -p $(PREFIX)/var/lib/proot-distro/installed-rootfs/ubuntu/tmp/
+	cp $(SRC_DIR)/usb_bridge_template.c $(PREFIX)/var/lib/proot-distro/installed-rootfs/ubuntu/tmp/
 	
 	@echo "Copying worker scripts and wrappers to global bin..."
 	cp $(SCRIPT_DIR)/run_scanner.sh $(PREFIX)/bin/

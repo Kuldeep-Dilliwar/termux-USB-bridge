@@ -2,7 +2,6 @@
 
 FD=$1
 USB_PATH=$TARGET_USB_PATH
-REPO_DIR="$HOME/termux-USB-bridge"
 
 if [ -z "$FD" ]; then
     echo "Error: No File Descriptor provided."
@@ -15,37 +14,35 @@ DEV_STR=$(echo "$USB_PATH" | cut -d'/' -f6)
 [ -z "$DEV_STR" ] && DEV_STR="002"
 
 echo "1. Cloning Native Hardware to Sysfs..."
-gcc "$REPO_DIR/src/universal_clone.c" -o "$REPO_DIR/universal_clone"
-"$REPO_DIR/universal_clone" "$FD" "$DEV"
+universal_clone "$FD" "$DEV"
 
 if [ "$BRIDGE_NATIVE" == "1" ]; then
     echo "2. Building Native Universal Bridge..."
-    cp "$REPO_DIR/src/usb_bridge_native_template.c" "$REPO_DIR/src/usb_bridge_native.c"
-    sed -i "s/__FD__/$FD/g" "$REPO_DIR/src/usb_bridge_native.c"
-    sed -i "s/__DEV__/$DEV_STR/g" "$REPO_DIR/src/usb_bridge_native.c"
+    # Point entirely to the PREFIX/tmp directory installed by make
+    cp "$PREFIX/tmp/usb_bridge_native_template.c" "$PREFIX/tmp/usb_bridge_native.c"
+    sed -i "s/__FD__/$FD/g" "$PREFIX/tmp/usb_bridge_native.c"
+    sed -i "s/__DEV__/$DEV_STR/g" "$PREFIX/tmp/usb_bridge_native.c"
     
-    gcc -shared -fPIC -o "$REPO_DIR/libusb_bridge_native.so" "$REPO_DIR/src/usb_bridge_native.c" -ldl
+    gcc -shared -fPIC -o "$PREFIX/bin/libusb_bridge_native.so" "$PREFIX/tmp/usb_bridge_native.c" -ldl
     
     echo "3. Running lsusb $BRIDGE_LSUSB_ARGS natively..."
     
-    # Ensure usb.ids is available for native lsusb
     if [ ! -f "$HOME/usb.ids" ]; then
         echo "[*] Fetching usb.ids dictionary..."
         curl -s -o "$HOME/usb.ids" http://www.linux-usb.org/usb.ids
     fi
 
-    export LD_LIBRARY_PATH="$REPO_DIR"
     export TERMUX_USB_FD="$FD"
     export LIBUSB_DEBUG="${BRIDGE_LOG_LEVEL:-0}"
-    export LD_PRELOAD="$REPO_DIR/libusb_bridge_native.so"
+    export LD_PRELOAD="$PREFIX/bin/libusb_bridge_native.so"
     
     lsusb $BRIDGE_LSUSB_ARGS
 else
     echo "2. Building Universal Bridge for proot..."
     proot-distro login ubuntu \
-        --bind "$REPO_DIR:/repo" \
         -- env TERMUX_USB_FD="$FD" TERMUX_USB_DEV="$DEV_STR" bash -c "
-        cp /repo/src/usb_bridge_template.c /tmp/usb_bridge.c
+        # Pull straight from the local /tmp folder
+        cp /tmp/usb_bridge_template.c /tmp/usb_bridge.c
         sed -i \"s/__FD__/\$TERMUX_USB_FD/g\" /tmp/usb_bridge.c
         sed -i \"s/__DEV__/\$TERMUX_USB_DEV/g\" /tmp/usb_bridge.c
         gcc -shared -fPIC -o /usr/local/lib/libusb_bridge.so /tmp/usb_bridge.c -ldl

@@ -26,7 +26,7 @@ static const char* swap_sysfs_path(const char *orig_path, char *new_path, size_t
 
     // Hijack any attempt to open the hardware dictionary and point it to our local file
     if (strstr(orig_path, "usb.ids")) {
-        snprintf(new_path, max_len, "%s/test/usb.ids", getenv("HOME"));
+        snprintf(new_path, max_len, "%s/usb.ids", getenv("HOME"));
         return new_path;
     }
 

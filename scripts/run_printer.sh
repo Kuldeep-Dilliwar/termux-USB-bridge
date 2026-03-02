@@ -2,7 +2,6 @@
 
 FD=$1
 USB_PATH=$2
-REPO_DIR="$HOME/termux-USB-bridge"
 
 if [ -z "$FILE_TO_PRINT" ]; then
     echo "[!] Error: FILE_TO_PRINT variable not set."
@@ -15,7 +14,6 @@ DEV_STR=$(echo "$USB_PATH" | cut -d'/' -f6)
 [ -z "$DEV_STR" ] && DEV_STR="002"
 
 # --- SAFETY NETS ---
-# Android termux-usb strips environment variables. These guarantee Ghostscript never crashes.
 [ -z "$PRINT_PAPER_GS" ] && export PRINT_PAPER_GS="a4"
 [ -z "$PRINT_PAPER_CUPS" ] && export PRINT_PAPER_CUPS="A4"
 [ -z "$FOO_PAPER" ] && export FOO_PAPER="-p9"
@@ -29,11 +27,10 @@ proot-distro login ubuntu \
     --bind "$HOME/fake_usb/sys/bus/usb:/sys/bus/usb" \
     --bind "$HOME/fake_usb/dev/bus/usb:/dev/bus/usb" \
     --bind "$HOME:$HOME" \
-    --bind "$REPO_DIR:/repo" \
     -- env TERMUX_USB_FD="$FD" TERMUX_USB_DEV="$DEV_STR" LIBUSB_DEBUG="${BRIDGE_LOG_LEVEL:-0}" FILE_TO_PRINT="$FILE_TO_PRINT" PRINT_PAPER_GS="$PRINT_PAPER_GS" PRINT_PAPER_CUPS="$PRINT_PAPER_CUPS" PRINT_FIT_GS="$PRINT_FIT_GS" PRINT_FIT_CUPS="$PRINT_FIT_CUPS" FOO_PAPER="$FOO_PAPER" PRINT_RES="$PRINT_RES" PRINT_MODEL="$PRINT_MODEL" GS_EXTRA_ARGS="$GS_EXTRA_ARGS" FORCE_DRIVER="$FORCE_DRIVER" bash -c "
 
-    # 1. Rebuild Unified Bridge dynamically
-    cp /repo/src/usb_bridge_template.c /tmp/usb_bridge.c
+    # 1. Rebuild Unified Bridge dynamically from local PRoot /tmp
+    cp /tmp/usb_bridge_template.c /tmp/usb_bridge.c
     sed -i \"s/__FD__/\$TERMUX_USB_FD/g\" /tmp/usb_bridge.c
     sed -i \"s/__DEV__/\$TERMUX_USB_DEV/g\" /tmp/usb_bridge.c
     gcc -shared -fPIC -o /usr/local/lib/libusb_bridge.so /tmp/usb_bridge.c -ldl
