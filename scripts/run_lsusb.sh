@@ -26,11 +26,6 @@ if [ "$BRIDGE_NATIVE" == "1" ]; then
     gcc -shared -fPIC -o "$PREFIX/bin/libusb_bridge_native.so" "$PREFIX/tmp/usb_bridge_native.c" -ldl
     
     echo "3. Running lsusb $BRIDGE_LSUSB_ARGS natively..."
-    
-    if [ ! -f "$HOME/usb.ids" ]; then
-        echo "[*] Fetching usb.ids dictionary..."
-        curl -s -o "$HOME/usb.ids" http://www.linux-usb.org/usb.ids
-    fi
 
     export TERMUX_USB_FD="$FD"
     export LIBUSB_DEBUG="${BRIDGE_LOG_LEVEL:-0}"

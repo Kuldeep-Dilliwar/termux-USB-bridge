@@ -24,12 +24,6 @@ __attribute__((constructor)) void init(void) {
 static const char* swap_sysfs_path(const char *orig_path, char *new_path, size_t max_len) {
     if (!orig_path) return orig_path;
 
-    // Hijack any attempt to open the hardware dictionary and point it to our local file
-    if (strstr(orig_path, "usb.ids")) {
-        snprintf(new_path, max_len, "%s/usb.ids", getenv("HOME"));
-        return new_path;
-    }
-
     if (strstr(orig_path, "/sys/bus/usb") || strstr(orig_path, "/dev/bus/usb")) {
         snprintf(new_path, max_len, "%s/fake_usb%s", getenv("HOME"), orig_path);
         return new_path;
