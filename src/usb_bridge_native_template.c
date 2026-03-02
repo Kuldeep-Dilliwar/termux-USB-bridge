@@ -37,14 +37,14 @@ DIR *opendir(const char *name) {
     char fake_path[512];
     const char *target = swap_sysfs_path(name, fake_path, sizeof(fake_path));
     if (target != name) {
-        fprintf(stderr, "[BRIDGE] Redirecting opendir: %s -> %s\n", name, target);
+        // fprintf(stderr, "[BRIDGE] Redirecting opendir: %s -> %s\n", name, target);
     }
     return orig(target);
 }
 
 static int check_and_hijack(const char *path, const char *func) {
     if (path && strstr(path, "dev/bus/usb") && strstr(path, DEV_NUM_STR)) {
-        fprintf(stderr, "[BRIDGE] HIJACKING %s for %s! Returning FD %d\n", func, path, ANDROID_USB_FD);
+        // fprintf(stderr, "[BRIDGE] HIJACKING %s for %s! Returning FD %d\n", func, path, ANDROID_USB_FD);
         return ANDROID_USB_FD;
     }
     return -1;
