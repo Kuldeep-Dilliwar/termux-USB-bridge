@@ -23,7 +23,7 @@ universal_clone "$FD" "$DEV"
 echo "2. Building Universal Bridge..."
 proot-distro login ubuntu \
     -- env TERMUX_USB_FD="$FD" TERMUX_USB_DEV="$DEV_STR" bash -c "
-    cp /tmp/usb_bridge_template.c /tmp/usb_bridge.c
+    cp /usr/local/share/termux-usb-bridge/usb_bridge_template.c /tmp/usb_bridge.c
     sed -i \"s/__FD__/\$TERMUX_USB_FD/g\" /tmp/usb_bridge.c
     sed -i \"s/__DEV__/\$TERMUX_USB_DEV/g\" /tmp/usb_bridge.c
     gcc -shared -fPIC -o /usr/local/lib/libusb_bridge.so /tmp/usb_bridge.c -ldl

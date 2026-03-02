@@ -19,7 +19,7 @@ universal_clone "$FD" "$DEV"
 if [ "$BRIDGE_NATIVE" == "1" ]; then
     echo "2. Building Native Universal Bridge..."
     # Point entirely to the PREFIX/tmp directory installed by make
-    cp "$PREFIX/tmp/usb_bridge_native_template.c" "$PREFIX/tmp/usb_bridge_native.c"
+    cp "$PREFIX/share/termux-usb-bridge/usb_bridge_native_template.c" "$PREFIX/tmp/usb_bridge_native.c"
     sed -i "s/__FD__/$FD/g" "$PREFIX/tmp/usb_bridge_native.c"
     sed -i "s/__DEV__/$DEV_STR/g" "$PREFIX/tmp/usb_bridge_native.c"
     

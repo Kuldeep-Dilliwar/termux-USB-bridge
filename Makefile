@@ -48,13 +48,15 @@ install: install-deps all
 	proot-distro login ubuntu -- bash -c "echo 'exec /usr/lib/cups/backend/usb-real \"\$$@\"' >> /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "chmod 755 /usr/lib/cups/backend/usb"
 
-	mkdir -p $(PREFIX)/tmp
-	@echo "Copying native bridge template to PREFIX/tmp/..."
-	cp $(SRC_DIR)/usb_bridge_native_template.c $(PREFIX)/tmp/
+	@echo "Creating permanent template directories..."
+	mkdir -p $(PREFIX)/share/termux-usb-bridge
+	mkdir -p $(PREFIX)/var/lib/proot-distro/installed-rootfs/ubuntu/usr/local/share/termux-usb-bridge
+	
+	@echo "Copying native bridge template..."
+	cp $(SRC_DIR)/usb_bridge_native_template.c $(PREFIX)/share/termux-usb-bridge/
 
-	@echo "Copying PRoot bridge template to Ubuntu /tmp/..."
-	mkdir -p $(PREFIX)/var/lib/proot-distro/installed-rootfs/ubuntu/tmp/
-	cp $(SRC_DIR)/usb_bridge_template.c $(PREFIX)/var/lib/proot-distro/installed-rootfs/ubuntu/tmp/
+	@echo "Copying PRoot bridge template..."
+	cp $(SRC_DIR)/usb_bridge_template.c $(PREFIX)/var/lib/proot-distro/installed-rootfs/ubuntu/usr/local/share/termux-usb-bridge/
 	
 	@echo "Copying worker scripts and wrappers to global bin..."
 	cp $(SCRIPT_DIR)/run_scanner.sh $(PREFIX)/bin/
