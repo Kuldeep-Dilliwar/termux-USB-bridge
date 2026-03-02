@@ -1,28 +1,40 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 # Default values
-export BRIDGE_LSUSB_VERBOSE=""
+export BRIDGE_LSUSB_ARGS=""
 export BRIDGE_LOG_LEVEL=0
+export BRIDGE_NATIVE=0
 
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -v|--verbose)
-            export BRIDGE_LSUSB_VERBOSE="-v"
+            export BRIDGE_LSUSB_ARGS="$BRIDGE_LSUSB_ARGS -v"
             shift
             ;;
         -l|--log-level)
             export BRIDGE_LOG_LEVEL="$2"
             shift 2
             ;;
+        -n|--native)
+            export BRIDGE_NATIVE=1
+            shift
+            ;;
         -h|--help)
-            echo "Usage: termux-lsusb [options]"
+            echo "Usage: termux-lsusb [options] [lsusb_options]"
             echo "Options:"
-            echo "  -v, --verbose    Use verbose output (lsusb -v)"
+            echo "  -n, --native     Run in native Termux instead of proot"
             echo "  -l level         Set libusb log level (0-4, default 0)"
+            echo "  -v, --verbose    Shorthand for lsusb -v"
+            echo "  -h, --help       Show this help"
+            echo ""
+            echo "All other options are passed directly to lsusb."
             exit 0
             ;;
-        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+        *)
+            export BRIDGE_LSUSB_ARGS="$BRIDGE_LSUSB_ARGS $1"
+            shift
+            ;;
     esac
 done
 
@@ -34,4 +46,5 @@ if [ -z "$USB_PATH" ]; then
 fi
 
 echo "Found USB device at $USB_PATH. Requesting permission..."
+export TARGET_USB_PATH="$USB_PATH"
 termux-usb -r -e run_lsusb.sh "$USB_PATH"
