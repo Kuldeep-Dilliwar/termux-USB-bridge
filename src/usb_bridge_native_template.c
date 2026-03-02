@@ -17,7 +17,7 @@
 #define DEV_NUM_STR "__DEV__"
 
 __attribute__((constructor)) void init(void) {
-    fprintf(stderr, "[BRIDGE] HARDCODED BRIDGE LOADED! Target FD: %d, Target DEV: %s\n", ANDROID_USB_FD, DEV_NUM_STR);
+    // fprintf(stderr, "[BRIDGE] HARDCODED BRIDGE LOADED! Target FD: %d, Target DEV: %s\n", ANDROID_USB_FD, DEV_NUM_STR);
 }
 
 // Redirect /sys/bus/usb and /dev/bus/usb paths to our fake directory

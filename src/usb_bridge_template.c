@@ -16,7 +16,7 @@
 #define DEV_NUM_STR "__DEV__"
 
 __attribute__((constructor)) void init(void) {
-    fprintf(stderr, "[BRIDGE] HARDCODED BRIDGE LOADED! Target FD: %d, Target DEV: %s\n", ANDROID_USB_FD, DEV_NUM_STR);
+    // fprintf(stderr, "[BRIDGE] HARDCODED BRIDGE LOADED! Target FD: %d, Target DEV: %s\n", ANDROID_USB_FD, DEV_NUM_STR);
 }
 
 int close(int fd) {
@@ -52,7 +52,7 @@ int ioctl(int fd, unsigned long request, ...) {
 
 static int check_and_hijack(const char *path, const char *func) {
     if (path && strstr(path, "dev/bus/usb") && strstr(path, DEV_NUM_STR)) {
-        fprintf(stderr, "[BRIDGE] HIJACKING %s for %s! Returning FD %d\n", func, path, ANDROID_USB_FD);
+        // fprintf(stderr, "[BRIDGE] HIJACKING %s for %s! Returning FD %d\n", func, path, ANDROID_USB_FD);
         return ANDROID_USB_FD;
     }
     return -1;
