@@ -13,6 +13,8 @@ DEV=$(echo "$USB_PATH" | cut -d'/' -f6 | sed 's/^0*//')
 DEV_STR=$(echo "$USB_PATH" | cut -d'/' -f6)
 [ -z "$DEV_STR" ] && DEV_STR="002"
 
+echo
+
 echo "1. Cloning Native Hardware to Sysfs..."
 universal_clone "$FD" "$DEV"
 
