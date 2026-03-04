@@ -46,7 +46,7 @@ install: install-deps all
 	proot-distro login ubuntu -- bash -c "echo '#!/bin/bash' > /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "echo 'export LD_LIBRARY_PATH=\"/usr/local/lib\"' >> /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "echo 'export LD_PRELOAD=\"/usr/local/lib/libusb_bridge.so\"' >> /usr/lib/cups/backend/usb"
-	proot-distro login ubuntu -- bash -c "echo 'export LIBUSB_DEBUG=4' >> /usr/lib/cups/backend/usb"
+	proot-distro login ubuntu -- bash -c "echo 'export LIBUSB_DEBUG=0' >> /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "echo 'exec /usr/lib/cups/backend/usb-real \"\$$@\"' >> /usr/lib/cups/backend/usb"
 	proot-distro login ubuntu -- bash -c "chmod 755 /usr/lib/cups/backend/usb"
 

@@ -2,6 +2,7 @@
 
 FD=$1
 USB_PATH=$2
+export PROOT_NO_WARNINGS=1
 
 if [ -z "$FILE_TO_PRINT" ]; then
     echo "[!] Error: FILE_TO_PRINT variable not set."
@@ -106,7 +107,11 @@ proot-distro login ubuntu \
     # 4. Push to Hardware via Bridge
     echo \"[*] Sending raw data to USB...\"
     export DEVICE_URI=\"\$DISCOVERED_URI\"
-    /usr/lib/cups/backend/usb 1 user \"Job\" 1 \"\" \"/tmp/out.raw\"
+    if [ \"\$LIBUSB_DEBUG\" = \"0\" ] || [ -z \"\$LIBUSB_DEBUG\" ]; then
+        /usr/lib/cups/backend/usb 1 user \"Job\" 1 \"\" \"/tmp/out.raw\" 2>/tmp/cups_usb.log
+    else
+        /usr/lib/cups/backend/usb 1 user \"Job\" 1 \"\" \"/tmp/out.raw\"
+    fi
     
     echo \"[*] Finished. If paper didn't pull, check printer lights.\"
     
