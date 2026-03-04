@@ -12,7 +12,9 @@ all: build-native build-proot
 
 install-deps:
 	@echo "Installing Termux dependencies..."
-	pkg update -y && pkg install -y clang termux-api jq proot-distro root-repo usbutils
+	pkg update -y && pkg install -y clang termux-api jq proot-distro 
+	pkg install -y root-repo 
+	pkg install -y usbutils
 	@echo "Installing Ubuntu PRoot..."
 	proot-distro install ubuntu || true
 	@echo "Installing Ubuntu dependencies..."
