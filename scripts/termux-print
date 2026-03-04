@@ -59,6 +59,7 @@ export PRINT_MODEL="$MODEL"
 export GS_EXTRA_ARGS="$GS_EXTRA_ARGS"
 export FORCE_DRIVER="$FORCE_DRIVER"
 export BRIDGE_LOG_LEVEL="$BRIDGE_LOG_LEVEL"
+export FORCE_CUPS="$FORCE_CUPS"
 
 USB_PATH=$(termux-usb -l | grep -o "/dev/bus/usb/[0-9]*/[0-9]*" | head -n 1)
 
