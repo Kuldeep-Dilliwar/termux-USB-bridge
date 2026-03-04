@@ -19,7 +19,9 @@ DEV_STR=$(echo "$USB_PATH" | cut -d'/' -f6)
 [ -z "$FOO_PAPER" ] && export FOO_PAPER="-p9"
 [ -z "$PRINT_RES" ] && export PRINT_RES="1200x600"
 [ -z "$PRINT_MODEL" ] && export PRINT_MODEL="-z1"
+[ -z "$FORCE_CUPS" ] && export FORCE_CUPS = "false"
 # -------------------
+
 
 universal_clone "$FD" "$DEV"
 
