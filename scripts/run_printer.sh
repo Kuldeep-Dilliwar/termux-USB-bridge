@@ -53,7 +53,7 @@ proot-distro login ubuntu \
     SHORT_NUM=\$(echo \"\$MODEL_NUM\" | cut -c1-3)
 
     # 3. HYBRID ROUTING ENGINE
-    if [ "\$FORCE_CUPS" != "true" ] && echo \"\$HW_NAME\" | grep -i -E \"M1136|M1132|P1102|P1005|P1006|P1007|P1008|P1505|P2014|P2035|M1005|M1120|M1212|M1319|P1566|P1606|CP1025|1022|1020|1018|1005|1000\"; then
+    if [[ \"\$FORCE_CUPS\" != \"true\" ]] && echo \"\$HW_NAME\" | grep -i -E \"M1136|M1132|P1102|P1005|P1006|P1007|P1008|P1505|P2014|P2035|M1005|M1120|M1212|M1319|P1566|P1606|CP1025|1022|1020|1018|1005|1000\"; then
         echo \"[*] TRICKY HOST-BASED PRINTER DETECTED!\"
         echo \"[*] Bypassing CUPS to use raw Ghostscript -> foo2zjs direct pipeline...\"
         

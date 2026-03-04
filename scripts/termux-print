@@ -11,6 +11,7 @@ MODEL="-z1"    # Default protocol for HP M1136/P1100 series
 GS_EXTRA_ARGS="" 
 FORCE_DRIVER=""
 BRIDGE_LOG_LEVEL=0
+FORCE_CUPS="false"
 
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
