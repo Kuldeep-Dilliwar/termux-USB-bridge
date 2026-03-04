@@ -2,7 +2,6 @@
 
 FD=$1
 USB_PATH=$TARGET_USB_PATH
-export PROOT_NO_WARNINGS=1
 
 if [ -z "$FD" ]; then
     echo "Error: No File Descriptor provided."

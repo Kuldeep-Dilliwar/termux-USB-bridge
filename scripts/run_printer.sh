@@ -2,7 +2,6 @@
 
 FD=$1
 USB_PATH=$2
-export PROOT_NO_WARNINGS=1
 
 if [ -z "$FILE_TO_PRINT" ]; then
     echo "[!] Error: FILE_TO_PRINT variable not set."
