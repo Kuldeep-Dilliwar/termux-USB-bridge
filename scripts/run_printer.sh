@@ -30,6 +30,8 @@ proot-distro login ubuntu \
     --bind "$HOME:$HOME" \
     -- env TERMUX_USB_FD="$FD" TERMUX_USB_DEV="$DEV_STR" LIBUSB_DEBUG="${BRIDGE_LOG_LEVEL:-0}" FILE_TO_PRINT="$FILE_TO_PRINT" PRINT_PAPER_GS="$PRINT_PAPER_GS" PRINT_PAPER_CUPS="$PRINT_PAPER_CUPS" PRINT_FIT_GS="$PRINT_FIT_GS" PRINT_FIT_CUPS="$PRINT_FIT_CUPS" FOO_PAPER="$FOO_PAPER" PRINT_RES="$PRINT_RES" PRINT_MODEL="$PRINT_MODEL" GS_EXTRA_ARGS="$GS_EXTRA_ARGS" FORCE_DRIVER="$FORCE_DRIVER" bash -c "
 
+    # Dynamically inject the requested log level into the CUPS wrapper
+    sed -i \"s/^export LIBUSB_DEBUG=.*/export LIBUSB_DEBUG=\$LIBUSB_DEBUG/\" /usr/lib/cups/backend/usb
     
     # 1. Rebuild Unified Bridge dynamically from local PRoot /tmp
     cp /usr/local/share/termux-usb-bridge/usb_bridge_template.c /tmp/usb_bridge.c
